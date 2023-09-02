@@ -79,7 +79,7 @@ def append_word_in_words_list():
     if get_agreement():
         with open(FILE_NAME_APPENDED_WORDS, 'a', encoding='utf-8') as words_file:
             words_file.write(word + '\n')
-        sort_words_list()
+        sort_words_file()
     print()
 
 
