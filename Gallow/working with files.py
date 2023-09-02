@@ -46,6 +46,7 @@ def print_appended_words_file():
         print(file.read())
 
 
+COMMANDS = (clear_appended_words_file, sort_words_file, sort_appended_words_file, append_words_to_file, print_words_file, print_appended_words_file)
+
 while True:
-    COMMANDS = (clear_appended_words_file, sort_words_file, sort_appended_words_file, append_words_to_file, print_words_file, print_appended_words_file)
     COMMANDS[int(input('Command: '))]()
