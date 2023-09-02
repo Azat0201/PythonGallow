@@ -10,16 +10,17 @@ COMMANDS_NAME = {
  'добавить слово': ('добавляет в список слов для загадывание ваше слово', 5),
  'правило добавления слов': ('выводит правила добавления слов в список для загадывания', 6)
 }
-FILE_NAME = r'words.txt'
+FILE_NAME_WORDS = r'words.txt'
+FILE_NAME_APPENDED_WORDS = r'appended words.txt'
 ALPHABET = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
 
-with open(FILE_NAME, encoding='utf-8') as file:
+with open(FILE_NAME_WORDS, encoding='utf-8') as file:
     words_list = [word.strip() for word in file.readlines()]
 
 
-def get_agreement(statement='Вы уверены?: '):
+def get_agreement():
     while True:
-        if input(statement) in ('', 'да', 'yes', 'y', 'д'):
+        if input('Вы уверены?: ') in ('', 'да', 'yes', 'y', 'д'):
             return True
         return False
 
@@ -76,10 +77,9 @@ def append_word_in_words_list():
     print_append_words_rule()
     word = input('Какое слово вы хотите добавить: ').lower()
     if get_agreement():
-        with open(FILE_NAME, 'a', encoding='utf-8') as words_file:
-            words_file.write('\n' + word)
+        with open(FILE_NAME_APPENDED_WORDS, 'a', encoding='utf-8') as words_file:
+            words_file.write(word + '\n')
         sort_words_list()
-        word_list.append(word)
     print()
 
 
@@ -97,11 +97,13 @@ def print_append_words_rule():
 ''')
 
 
-def sort_words_list():
-    with open(FILE_NAME, 'r+', encoding='utf-8') as words_file:
-        words = [word for word in words_file.readlines()]
-        words.sort()
-        words_file.write(''.join(words))
+def sort_words_file():
+    with open(FILE_NAME_WORDS, 'r', encoding='utf-8') as words_file:
+        title = words_file.readline()
+        words = [word for word in sorted(words_file.readlines())[1:]]
+
+    with open(FILE_NAME_WORDS, 'w', encoding='utf-8') as words_file:
+        words_file.write(title + ''.join(words))
 
 
 COMMANDS = (print_commands_list, print_rule_game, print_letters_list, print_words_list, start_over, append_word_in_words_list, print_append_words_rule)
@@ -138,6 +140,7 @@ while True:
 
 
     while True:
+        command = None
         flag_guess = False
         bar_in = ''.join([f'|{i}|  ' for i in correct_letters_list])
         bar_bottom = ' -   ' * len(word) + ' ' * 25 + 'Счётчик ошибок:' + str(count_attempt)
